@@ -1,0 +1,12 @@
+# Powered by https://theapache64.github.io/git-do-not-ignore/
+!trino
+!minio/
+minio/*
+!minio/docker-compose.yml
+!mongo/
+mongo/*
+!mongo/docker-compose.yml
+!mongo/mock_data
+
+!.gitignore
+!README.md

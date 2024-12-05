@@ -7,7 +7,8 @@
         "spu_id": "fashionnova_4010590",
         "skc_id": "fashionnova_1321910861948",
         "skcs_id": [
-            "fashionnova_1321910861948"
+            "fashionnova_1321910861948",
+            "fashionnova_1321910861949"
         ],
         "price": 34.99,
         "prices": [
@@ -118,7 +119,7 @@
         ],
         "skc_name": "Londyn Elizabeth Snatched Ribbed Midi Dress - Sage",
         "currency": "USD",
-        "skc_create_time": 20201214,
+        "skc_create_time": 20201215,
         "sell_list": [
             {
                 "pattern": "Purecolor",
@@ -181,7 +182,7 @@
         ],
         "skc_name": "Londyn Elizabeth Snatched Ribbed Midi Dress - Olive",
         "currency": "USD",
-        "skc_create_time": 20201214,
+        "skc_create_time": 20201216,
         "sell_list": [
             {
                 "pattern": "Purecolor",

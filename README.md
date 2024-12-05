@@ -29,9 +29,19 @@ export COLLECTION_NAME=competitor_other_on_sale
 docker compose cp ./mock_data/$COLLECTION_NAME.json mongo:/tmp/
 docker compose exec -it mongo \
     mongoimport --host '127.0.0.1:27017' -u 'root' -p 'root123' --authenticationDatabase 'admin' \
-     --db test --collection $COLLECTION_NAME --file /tmp/$COLLECTION_NAME.json --jsonArray
+     --db test --collection $COLLECTION_NAME --file /tmp/$COLLECTION_NAME.json --jsonArray --mode upsert
 
 # Collection: xxx
+```
+
+### Defind schema for Trino
+
+```sh
+cd ./mongo/
+docker compose cp ./mock_data/_schema.json mongo:/tmp/
+docker compose exec -it mongo \
+    mongoimport --host '127.0.0.1:27017' -u 'root' -p 'root123' --authenticationDatabase 'admin' \
+     --db test --collection _schema --file /tmp/_schema.json --jsonArray --mode upsert
 ```
 
 
@@ -44,35 +54,33 @@ cd ./minio/
 docker compose up -d
 ```
 
-## Load: s3fs
-
-```bash
-# Installation
-sudo apt update && sudo apt install -y s3fs
-
-# Create mount directory
-mkdir -p /workspaces/codespaces-blank/s3fs/minio/warehouse/
-
-# Create secret
-cat > /workspaces/codespaces-blank/s3fs/.s3fs-minio.passwd <<EOF
-minioadmin:minioadmin
-EOF
-chmod 600 /workspaces/codespaces-blank/s3fs/.s3fs-minio.passwd
-
-# Mount
-s3fs warehouse /workspaces/codespaces-blank/s3fs/minio/warehouse \
--o passwd_file=/workspaces/codespaces-blank/s3fs/.s3fs-minio.passwd \
--o url=http://127.0.0.1:9000 \
--o allow_other \
--o mp_umask=0000 \
--o use_path_request_style \
--f
-```
-
 ## Transform: Trino
 
+Installation
+
 ```sh
-docker run -d --name trino --restart always -v $(pwd)/trino:/etc/trino --network host trinodb/trino:466
+docker run -d --rm --name trino -v $(pwd)/trino:/etc/trino --network host trinodb/trino:466
+```
+
+Transform: mongo -> hive local parquet
+
+```sql
 ```
 
 ## SR
+
+Installation
+
+```sh
+# -p 9030:9030 -p 8030:8030 -p 8040:8040 \
+docker run -d \
+--rm \
+--name sr \
+--network host \
+starrocks/allin1-ubuntu:3.1.2
+```
+
+Data Read
+
+```sql
+```

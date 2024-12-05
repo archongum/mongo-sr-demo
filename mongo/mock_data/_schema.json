@@ -1,0 +1,74 @@
+[
+    {
+        "table": "competitor_other_on_sale",
+        "_id": {
+            "$oid": "674fc5ac6dc2e543e0ece2ce"
+        },
+        "fields": [
+            {
+                "name": "_id",
+                "type": "varchar"
+            },
+            {
+                "name": "mall",
+                "type": "varchar"
+            },
+            {
+                "name": "onsale_time",
+                "type": "varchar"
+            },
+            {
+                "name": "brand",
+                "type": "varchar"
+            },
+            {
+                "name": "spu_id",
+                "type": "varchar"
+            },
+            {
+                "name": "skc_id",
+                "type": "varchar"
+            },
+            {
+                "name": "skcs_id",
+                "type": "varchar"
+            },
+            {
+                "name": "price",
+                "type": "varchar"
+            },
+            {
+                "name": "prices",
+                "type": "varchar"
+            },
+            {
+                "name": "product_tag",
+                "type": "varchar"
+            },
+            {
+                "name": "multi_color",
+                "type": "varchar"
+            },
+            {
+                "name": "categories",
+                "type": "varchar"
+            },
+            {
+                "name": "skc_name",
+                "type": "varchar"
+            },
+            {
+                "name": "currency",
+                "type": "varchar"
+            },
+            {
+                "name": "skc_create_time",
+                "type": "varchar"
+            },
+            {
+                "name": "sell_list",
+                "type": "varchar"
+            }
+        ]
+    }
+]

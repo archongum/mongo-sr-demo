@@ -9,7 +9,7 @@
 ### Startup
 
 ```sh
-cd ./mongo/
+cd /workspace/mongo-sr-demo/mongo/
 docker compose up -d
 ```
 
@@ -24,7 +24,7 @@ mongosh "mongodb://root:root123@127.0.0.1:27017/"
 
 ```sh
 # Collection: competitor_other_on_sale
-cd ./mongo/
+cd /workspace/mongo-sr-demo/mongo/
 export COLLECTION_NAME=competitor_other_on_sale
 docker compose cp ./mock_data/$COLLECTION_NAME.json mongo:/tmp/
 docker compose exec -it mongo \
@@ -37,7 +37,7 @@ docker compose exec -it mongo \
 ### Defind schema for Trino
 
 ```sh
-cd ./mongo/
+cd /workspace/mongo-sr-demo/mongo/
 docker compose cp ./mock_data/_schema.json mongo:/tmp/
 docker compose exec -it mongo \
     mongoimport --host '127.0.0.1:27017' -u 'root' -p 'root123' --authenticationDatabase 'admin' \
@@ -47,10 +47,40 @@ docker compose exec -it mongo \
 
 ## Load: minio
 
-### Startup
+### minio1
 
 ```sh
-cd ./minio/
+cd /workspace/mongo-sr-demo/minio1/
+docker compose up -d
+```
+
+### minio2
+
+```sh
+cd /workspace/mongo-sr-demo/minio2/
+docker compose up -d
+```
+
+## Metastore: Hive Metastore
+
+### TMP: build image
+
+```sh
+# build image locally, will removing to dockerhub
+docker build . --tag archongum/hive:4.0.1
+```
+
+### metastore1
+
+```sh
+cd /workspace/mongo-sr-demo/metastore1/
+docker compose up -d
+```
+
+### metastore2
+
+```sh
+cd /workspace/mongo-sr-demo/metastore2/
 docker compose up -d
 ```
 
@@ -59,28 +89,19 @@ docker compose up -d
 Installation
 
 ```sh
+cd /workspace/mongo-sr-demo/
 docker run -d --rm --name trino -v $(pwd)/trino:/etc/trino --network host trinodb/trino:466
 ```
 
-Transform: mongo -> hive local parquet
+Transform: mongo -> s3 parquet
 
-```sql
-```
+[trino.sql](./1_trino.sql)
 
 ## SR
 
-Installation
-
 ```sh
-# -p 9030:9030 -p 8030:8030 -p 8040:8040 \
-docker run -d \
---rm \
---name sr \
---network host \
-starrocks/allin1-ubuntu:3.1.2
+cd /workspace/mongo-sr-demo/
+docker run -d --rm --name sr --network host starrocks/allin1-ubuntu:3.1.2
 ```
 
-Data Read
-
-```sql
-```
+[trino.sql](./2_sr.sql)

@@ -95,7 +95,7 @@ docker run -d --rm --name trino -v $(pwd)/trino:/etc/trino --network host trinod
 
 Transform: mongo -> s3 parquet
 
-[trino.sql](./1_trino.sql)
+[1_trino.sql](./1_trino.sql)
 
 ## SR
 
@@ -104,4 +104,4 @@ cd /workspace/mongo-sr-demo/
 docker run -d --rm --name sr --network host starrocks/allin1-ubuntu:3.1.2
 ```
 
-[trino.sql](./2_sr.sql)
+[2_sr.sql](./2_sr.sql)

@@ -17,7 +17,7 @@
   <!-- [START] S3 -->
   <property>
     <name>fs.s3a.endpoint</name>
-    <value>minio:9000</value>
+    <value>minio2:9000</value>
   </property>
   <property>
     <name>fs.s3a.access.key</name>

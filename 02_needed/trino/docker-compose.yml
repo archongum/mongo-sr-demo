@@ -1,0 +1,12 @@
+services:
+  trino:
+    image: trinodb/trino:466
+    container_name: trino
+    network_mode: host
+    volumes:
+      - ./etc:/etc/trino
+    healthcheck:
+      test: curl -f localhost:18010
+      interval: 3s
+      timeout: 2s
+      retries: 10

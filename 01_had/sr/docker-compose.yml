@@ -1,0 +1,10 @@
+services:
+  sr:
+    image: starrocks/allin1-ubuntu:3.1.2
+    container_name: sr
+    network_mode: host
+    healthcheck:
+      test: nc -zv localhost 9030
+      interval: 3s
+      timeout: 2s
+      retries: 10

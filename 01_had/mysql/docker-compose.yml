@@ -1,0 +1,25 @@
+x-service-templates:
+  template_mysql: &template_mysql
+    image: mysql:8.0.23
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root123
+      MYSQL_DATABASE: hive
+      MYSQL_USER: hive
+      MYSQL_PASSWORD: hive123
+    healthcheck:
+      test: mysql -proot123 -e 'select 1'
+      interval: 5s
+      timeout: 3s
+      retries: 10
+services:
+  mysql1:
+    <<: *template_mysql
+    container_name: mysql1
+    volumes:
+      - ./data1:/var/lib/mysql
+  mysql2:
+    <<: *template_mysql
+    container_name: mysql2
+    volumes:
+      - ./data2:/var/lib/mysql

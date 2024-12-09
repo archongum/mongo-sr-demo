@@ -12,15 +12,15 @@
   </property>
   <property>
     <name>javax.jdo.option.ConnectionURL</name>
-    <value>jdbc:mysql://metastore-db:3306/metastore_db</value>
+    <value>jdbc:mysql://mysql1:3306/hive</value>
   </property>
   <property>
     <name>javax.jdo.option.ConnectionUserName</name>
-    <value>root</value>
+    <value>hive</value>
   </property>
   <property>
     <name>javax.jdo.option.ConnectionPassword</name>
-    <value>root123</value>
+    <value>hive123</value>
   </property>
   <!-- [END] Database Connection -->
 </configuration>

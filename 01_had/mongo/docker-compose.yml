@@ -10,13 +10,18 @@ services:
       - 27017:27017
     volumes:
       - ./data:/data/db
-
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongo localhost:27017/mydb --quiet
+      interval: 3s
+      timeout: 2s
+      retries: 10
   mongo-express:
     image: mongo-express:1.0.2
     container_name: mongo-express
     restart: always
     depends_on:
-      - mongo
+      mongo:
+        condition: service_healthy
     ports:
       - 8081:8081
     environment:
@@ -24,3 +29,8 @@ services:
       ME_CONFIG_MONGODB_ADMINPASSWORD: root123 
       ME_CONFIG_MONGODB_URL: mongodb://root:root123@mongo:27017/
       ME_CONFIG_BASICAUTH: false
+    healthcheck:
+      test: nc -zv localhost 8081
+      interval: 3s
+      timeout: 2s
+      retries: 10

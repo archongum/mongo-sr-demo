@@ -4,27 +4,56 @@
 - Transform: Trino, parquet 
 - Load: SR EXTERNAL table stored as PARQUET location s3://
 
-## Extract: mongo
+## 01_had
 
-### Startup
+### MySQL
+
+Deploy
 
 ```sh
-cd /workspace/mongo-sr-demo/mongo/
+cd /workspace/mongo-sr-demo/01_had/mysql/
 docker compose up -d
 ```
 
-### (Option) Verify
+Services
+
+- mysql1: 127.0.0.1:13306
+- mysql2: 127.0.0.1:23306
+
+### MinIO
+
+Deploy
 
 ```sh
-alias mongosh="docker run -ti --rm --network host alpine/mongosh mongosh"
-mongosh "mongodb://root:root123@127.0.0.1:27017/"
+cd /workspace/mongo-sr-demo/01_had/minio/
+docker compose up -d
 ```
 
-### Import mock data
+Services
+
+- minio1: 127.0.0.1:19000 bucket-1
+- minio2: 127.0.0.1:29000 bucket-2
+
+### MongoDB
+
+Deploy
 
 ```sh
+cd /workspace/mongo-sr-demo/01_had/mongo/
+docker compose up -d
+```
+
+Services
+
+- mongo: 127.0.0.1:27017
+- mongo-express: http://127.0.0.1:8081/
+
+#### Import mock data
+
+```sh
+cd /workspace/mongo-sr-demo/01_had/mongo/
+
 # Collection: competitor_other_on_sale
-cd /workspace/mongo-sr-demo/mongo/
 export COLLECTION_NAME=competitor_other_on_sale
 docker compose cp ./mock_data/$COLLECTION_NAME.json mongo:/tmp/
 docker compose exec -it mongo \
@@ -34,10 +63,10 @@ docker compose exec -it mongo \
 # Collection: xxx
 ```
 
-### Defind schema for Trino
+#### Defind schema for Trino
 
 ```sh
-cd /workspace/mongo-sr-demo/mongo/
+cd /workspace/mongo-sr-demo/01_had/mongo/
 docker compose cp ./mock_data/_schema.json mongo:/tmp/
 docker compose exec -it mongo \
     mongoimport --host '127.0.0.1:27017' -u 'root' -p 'root123' --authenticationDatabase 'admin' \
@@ -45,63 +74,65 @@ docker compose exec -it mongo \
 ```
 
 
-## Load: minio
-
-### minio1
+#### (Option) Verify
 
 ```sh
-cd /workspace/mongo-sr-demo/minio1/
+alias mongosh="docker run -ti --rm --network host alpine/mongosh mongosh"
+mongosh "mongodb://root:root123@127.0.0.1:27017/"
+```
+
+### StarRocks
+
+Deploy
+
+```sh
+cd /workspace/mongo-sr-demo/01_had/sr/
+# Cleanup first
+docker compose down && docker network prune -f && docker volume prune -f
 docker compose up -d
 ```
 
-### minio2
+Services
+
+- sr: 127.0.0.1:9030
+
+## 02_needed
+
+### Hive MetaStore
+
+Deploy
 
 ```sh
-cd /workspace/mongo-sr-demo/minio2/
+cd /workspace/mongo-sr-demo/02_needed/metastore/
 docker compose up -d
 ```
 
-## Metastore: Hive Metastore
+Services
 
-### TMP: build image
+- HMS 1: thrift://127.0.0.1:19083,thrift://127.0.0.1:19084
+- HMS 2: thrift://127.0.0.1:29083,thrift://127.0.0.1:29084
 
-```sh
-# build image locally, will removing to dockerhub
-docker build . --tag archongum/hive:4.0.1
-```
+### Trino
 
-### metastore1
+Deploy
 
 ```sh
-cd /workspace/mongo-sr-demo/metastore1/
+cd /workspace/mongo-sr-demo/02_needed/trino/
+# Cleanup first
+docker compose down && docker network prune -f && docker volume prune -f
 docker compose up -d
 ```
 
-### metastore2
+Services
 
-```sh
-cd /workspace/mongo-sr-demo/metastore2/
-docker compose up -d
-```
+- trino: 127.0.0.1:18010
 
-## Transform: Trino
-
-Installation
-
-```sh
-cd /workspace/mongo-sr-demo/
-docker run -d --rm --name trino -v $(pwd)/trino:/etc/trino --network host trinodb/trino:466
-```
+## 03_tests
 
 Transform: mongo -> s3 parquet
 
-[trino.sql](./1_trino.sql)
+[1_trino.sql](./03_tests/1_trino.sql)
 
-## SR
+Load: StarRocks Hive Catalog
 
-```sh
-cd /workspace/mongo-sr-demo/
-docker run -d --rm --name sr --network host starrocks/allin1-ubuntu:3.1.2
-```
-
-[trino.sql](./2_sr.sql)
+[2_sr.sql](./03_tests/2_sr.sql)

@@ -17,8 +17,8 @@ docker compose up -d
 
 Services
 
-- mysql1: 127.0.0.1:13306
-- mysql2: 127.0.0.1:23306
+- mysql1: jdbc:mysql://mysql1:3306/hive
+- mysql2: jdbc:mysql://mysql2:3306/hive
 
 ### MinIO
 
@@ -31,8 +31,10 @@ docker compose up -d
 
 Services
 
-- minio1: 127.0.0.1:19000 bucket-1
-- minio2: 127.0.0.1:29000 bucket-2
+- minio1: minio1:9000 bucket-1
+- minio2: minio2:9000 bucket-2
+- minio1-ui: http://127.0.0.1:19001/
+- minio2-ui: http://127.0.0.1:29002/
 
 ### MongoDB
 
@@ -45,7 +47,7 @@ docker compose up -d
 
 Services
 
-- mongo: 127.0.0.1:27017
+- mongo: mongodb://root:root123@mongo:27017/
 - mongo-express: http://127.0.0.1:8081/
 
 #### Import mock data
@@ -57,7 +59,7 @@ cd /workspace/mongo-sr-demo/01_had/mongo/
 export COLLECTION_NAME=competitor_other_on_sale
 docker compose cp ./mock_data/$COLLECTION_NAME.json mongo:/tmp/
 docker compose exec -it mongo \
-    mongoimport --host '127.0.0.1:27017' -u 'root' -p 'root123' --authenticationDatabase 'admin' \
+    mongoimport --host 'mongo:27017' -u 'root' -p 'root123' --authenticationDatabase 'admin' \
      --db test --collection $COLLECTION_NAME --file /tmp/$COLLECTION_NAME.json --jsonArray --mode upsert
 
 # Collection: xxx
@@ -69,7 +71,7 @@ docker compose exec -it mongo \
 cd /workspace/mongo-sr-demo/01_had/mongo/
 docker compose cp ./mock_data/_schema.json mongo:/tmp/
 docker compose exec -it mongo \
-    mongoimport --host '127.0.0.1:27017' -u 'root' -p 'root123' --authenticationDatabase 'admin' \
+    mongoimport --host 'mongo:27017' -u 'root' -p 'root123' --authenticationDatabase 'admin' \
      --db test --collection _schema --file /tmp/_schema.json --jsonArray --mode upsert
 ```
 
@@ -83,7 +85,9 @@ mongosh "mongodb://root:root123@127.0.0.1:27017/"
 
 ### StarRocks
 
-Deploy
+> [!NOTE] Start Hive MetaStore FIRST!
+
+Deploy 
 
 ```sh
 cd /workspace/mongo-sr-demo/01_had/sr/
@@ -94,7 +98,7 @@ docker compose up -d
 
 Services
 
-- sr: 127.0.0.1:9030
+- sr: jdbc:mysql://127.0.0.1:9030/
 
 ## 02_needed
 
@@ -109,8 +113,8 @@ docker compose up -d
 
 Services
 
-- HMS 1: thrift://127.0.0.1:19083,thrift://127.0.0.1:19084
-- HMS 2: thrift://127.0.0.1:29083,thrift://127.0.0.1:29084
+- metastore1: thrift://metastore1-ha1:9083,thrift://metastore1-ha2:9083
+- metastore2: thrift://metastore2-ha1:9083,thrift://metastore2-ha2:9083
 
 ### Trino
 
@@ -125,7 +129,8 @@ docker compose up -d
 
 Services
 
-- trino: 127.0.0.1:18010
+- trino: jdbc:trino://127.0.0.1:18010/
+- trino-ui: http://127.0.0.1:18010/
 
 ## 03_tests
 
@@ -136,3 +141,16 @@ Transform: mongo -> s3 parquet
 Load: StarRocks Hive Catalog
 
 [2_sr.sql](./03_tests/2_sr.sql)
+
+## Cleanup
+
+```sh
+# Remove containers
+docker ps -a | cut -d ' ' -f 1 | sed '1d'  | xargs docker rm -f
+# Remove networks
+docker network prune -f
+# Remove volumes
+docker volume prune -f
+# Remove local data
+sudo rm /workspace/mongo-sr-demo/0[1-2]_*/*/data* -rf
+```

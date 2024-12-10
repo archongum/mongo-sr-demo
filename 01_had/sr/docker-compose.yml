@@ -1,10 +1,22 @@
 services:
   sr:
     image: starrocks/allin1-ubuntu:3.1.2
+    hostname: sr
     container_name: sr
-    network_mode: host
+    networks:
+      - metastore-default
+      - minio_default
+    ports:
+      - 9030:9030
+      - 8030:8030
+      - 8040:8040
     healthcheck:
       test: nc -zv localhost 9030
       interval: 3s
       timeout: 2s
       retries: 10
+networks:
+  metastore-default:
+    external: true
+  minio_default:
+    external: true

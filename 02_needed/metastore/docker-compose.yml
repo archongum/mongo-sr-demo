@@ -3,6 +3,7 @@ x-service-templates:
     image: archongum/hive:4.0.1
     restart: always
     networks:
+      - metastore-default
       - mysql_default
       - minio_default
     environment:
@@ -16,36 +17,42 @@ x-service-templates:
       retries: 10
 services:
   # MetaStone 1 (HA)
-  metastore1_ha1:
+  metastore1-ha1:
     <<: *template_metastore
-    ports:
-      - 19083:9083
+    hostname: metastore1-ha1
+    container_name: metastore1-ha1
     volumes:
       - ./conf1/core-site.xml:/opt/hadoop/etc/hadoop/core-site.xml
       - ./conf1/metastore-site.xml:/opt/hive/conf/metastore-site.xml
-  metastore1_ha2:
+  metastore1-ha2:
     <<: *template_metastore
-    ports:
-      - 19084:9083
+    hostname: metastore1-ha2
+    container_name: metastore1-ha2
     volumes:
       - ./conf1/core-site.xml:/opt/hadoop/etc/hadoop/core-site.xml
       - ./conf1/metastore-site.xml:/opt/hive/conf/metastore-site.xml
   # MetaStone 2 (HA)
-  metastore2_ha1:
+  metastore2-ha1:
     <<: *template_metastore
-    ports:
-      - 29083:9083
+    hostname: metastore2-ha1
+    container_name: metastore2-ha1
     volumes:
       - ./conf2/core-site.xml:/opt/hadoop/etc/hadoop/core-site.xml
       - ./conf2/metastore-site.xml:/opt/hive/conf/metastore-site.xml
-  metastore2_ha2:
+  metastore2-ha2:
+    hostname: metastore2-ha2
+    container_name: metastore2-ha2
     <<: *template_metastore
-    ports:
-      - 29084:9083
     volumes:
       - ./conf2/core-site.xml:/opt/hadoop/etc/hadoop/core-site.xml
       - ./conf2/metastore-site.xml:/opt/hive/conf/metastore-site.xml
 networks:
+  # StarRocks changed 'thrift://metastore1-ha1:9083' to 'thrift://metastore1-ha1.metastore_default:9083'
+  # then throws 'Illegal character in hostname'
+  # so use '-' instead of '_'
+  metastore-default:
+    name: metastore-default
+    external: false
   mysql_default:
     external: true
   minio_default:

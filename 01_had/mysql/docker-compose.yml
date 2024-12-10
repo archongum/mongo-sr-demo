@@ -15,11 +15,13 @@ x-service-templates:
 services:
   mysql1:
     <<: *template_mysql
+    hostname: mysql1
     container_name: mysql1
     volumes:
       - ./data1:/var/lib/mysql
   mysql2:
     <<: *template_mysql
+    hostname: mysql2
     container_name: mysql2
     volumes:
       - ./data2:/var/lib/mysql

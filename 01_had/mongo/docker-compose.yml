@@ -1,6 +1,7 @@
 services:
   mongo:
     image: mongo:4.0.28
+    hostname: mongo
     container_name: mongo
     restart: always
     environment:
@@ -17,6 +18,7 @@ services:
       retries: 10
   mongo-express:
     image: mongo-express:1.0.2
+    hostname: mongo-express
     container_name: mongo-express
     restart: always
     depends_on:

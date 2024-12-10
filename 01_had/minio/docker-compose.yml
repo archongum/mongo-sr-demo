@@ -18,6 +18,7 @@ x-service-templates:
 services:
   minio1:
     <<: *template_minio
+    hostname: minio1
     container_name: minio1
     ports:
       - 19000:9000
@@ -26,6 +27,7 @@ services:
       - ./data1:/data
   minio2:
     <<: *template_minio
+    hostname: minio2
     container_name: minio2
     ports:
       - 29000:9000
@@ -34,6 +36,7 @@ services:
       - ./data2:/data
   mc:
     image: minio/mc
+    hostname: mc
     container_name: mc
     depends_on:
       minio1:

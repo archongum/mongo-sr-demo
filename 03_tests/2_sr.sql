@@ -4,10 +4,10 @@ CREATE EXTERNAL CATALOG minio1
 PROPERTIES (
     "type" = "hive",
     "hive.metastore.type" = "hive",
-    "hive.metastore.uris" = "thrift://127.0.0.1:19083,thrift://127.0.0.1:19084",
+    "hive.metastore.uris" = "thrift://metastore1-ha1:9083,thrift://metastore1-ha2:9083",
     -- # 3.1版本的默认值为7200秒太长了，生产环境可以设置成60秒
     "metastore_cache_refresh_interval_sec" = "10",
-    "aws.s3.endpoint" = "http://127.0.0.1:19000",
+    "aws.s3.endpoint" = "http://minio1:9000",
     "aws.s3.enable_ssl" = "false",
     "aws.s3.access_key" = "minioadmin",
     "aws.s3.secret_key" = "minioadmin",
@@ -21,10 +21,10 @@ CREATE EXTERNAL CATALOG minio2
 PROPERTIES (
     "type" = "hive",
     "hive.metastore.type" = "hive",
-    "hive.metastore.uris" = "thrift://127.0.0.1:29083,thrift://127.0.0.1:29084",
+    "hive.metastore.uris" = "thrift://metastore2-ha1:9083,thrift://metastore2-ha2:9083",
     -- # 3.1版本的默认值为7200秒太长了，生产环境可以设置成60秒
     "metastore_cache_refresh_interval_sec" = "10",
-    "aws.s3.endpoint" = "http://127.0.0.1:29000",
+    "aws.s3.endpoint" = "http://minio2:9000",
     "aws.s3.enable_ssl" = "false",
     "aws.s3.access_key" = "minioadmin",
     "aws.s3.secret_key" = "minioadmin",

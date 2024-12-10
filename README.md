@@ -1,8 +1,9 @@
 # mongo-sr-demo
 
-- Extract: mongo
-- Transform: Trino, parquet 
-- Load: SR EXTERNAL table stored as PARQUET location s3://
+- Storage: s3a:// (minio)
+- Extract: MongoDB
+- Transform: Trino, parquet
+- Load: StarRocks Hive catalog
 
 ## 01_had
 

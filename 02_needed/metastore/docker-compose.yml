@@ -40,9 +40,9 @@ services:
       - ./conf2/core-site.xml:/opt/hadoop/etc/hadoop/core-site.xml
       - ./conf2/metastore-site.xml:/opt/hive/conf/metastore-site.xml
   metastore2-ha2:
+    <<: *template_metastore
     hostname: metastore2-ha2
     container_name: metastore2-ha2
-    <<: *template_metastore
     volumes:
       - ./conf2/core-site.xml:/opt/hadoop/etc/hadoop/core-site.xml
       - ./conf2/metastore-site.xml:/opt/hive/conf/metastore-site.xml

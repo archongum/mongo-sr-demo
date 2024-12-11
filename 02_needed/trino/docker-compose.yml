@@ -7,6 +7,7 @@ services:
       - metastore-default
       - minio_default
       - mongo_default
+      - sr_default
     ports:
       - 18010:18010
     volumes:
@@ -22,4 +23,6 @@ networks:
   minio_default:
     external: true
   mongo_default:
+    external: true
+  sr_default:
     external: true

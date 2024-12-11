@@ -4,6 +4,7 @@ services:
     hostname: sr
     container_name: sr
     networks:
+      - sr_default
       - metastore-default
       - minio_default
     ports:
@@ -16,6 +17,9 @@ services:
       timeout: 2s
       retries: 10
 networks:
+  sr_default:
+    name: sr_default
+    external: false
   metastore-default:
     external: true
   minio_default:

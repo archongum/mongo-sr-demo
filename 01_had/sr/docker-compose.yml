@@ -1,6 +1,6 @@
 services:
   sr:
-    image: starrocks/allin1-ubuntu:3.1.2
+    image: starrocks/allin1-ubuntu:3.2.12
     hostname: sr
     container_name: sr
     networks:

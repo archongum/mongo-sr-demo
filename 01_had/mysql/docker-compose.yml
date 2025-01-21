@@ -1,6 +1,6 @@
 x-service-templates:
   template_mysql: &template_mysql
-    image: mysql:8.0.23
+    image: mysql:8.0.25
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: root123

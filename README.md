@@ -155,3 +155,19 @@ docker volume prune -f
 # Remove local data
 sudo rm /workspaces/mongo-sr-demo/0[1-2]_*/*/data* -rf
 ```
+
+## Addition
+
+### Backup/Restore HMS DB
+
+```sh
+# Install MySQL Client
+sudo apt update
+sudo apt install -y mariadb-client
+
+# Dump command
+mysqldump --host="127.0.0.1" --port="13306" --user="root" --password="root123" --databases "hive" | gzip > ./hms-db-$(date "+%Y%m%d").gzip
+
+# Restore command
+gunzip -c ./hms-db-$(date "+%Y%m%d").gzip | mysql --host="127.0.0.1" --port="13306" --user="root" --password="root123"
+```

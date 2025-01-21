@@ -12,7 +12,7 @@
 Deploy
 
 ```sh
-cd /workspace/mongo-sr-demo/01_had/mysql/
+cd /workspaces/mongo-sr-demo/01_had/mysql/
 docker compose up -d
 ```
 
@@ -26,7 +26,7 @@ Services
 Deploy
 
 ```sh
-cd /workspace/mongo-sr-demo/01_had/minio/
+cd /workspaces/mongo-sr-demo/01_had/minio/
 docker compose up -d
 ```
 
@@ -42,7 +42,7 @@ Services
 Deploy
 
 ```sh
-cd /workspace/mongo-sr-demo/01_had/mongo/
+cd /workspaces/mongo-sr-demo/01_had/mongo/
 docker compose up -d
 ```
 
@@ -54,7 +54,7 @@ Services
 #### Import mock data
 
 ```sh
-cd /workspace/mongo-sr-demo/01_had/mongo/
+cd /workspaces/mongo-sr-demo/01_had/mongo/
 
 # Collection: competitor_other_on_sale
 export COLLECTION_NAME=competitor_other_on_sale
@@ -69,7 +69,7 @@ docker compose exec -it mongo \
 #### Defind schema for Trino
 
 ```sh
-cd /workspace/mongo-sr-demo/01_had/mongo/
+cd /workspaces/mongo-sr-demo/01_had/mongo/
 docker compose cp ./mock_data/_schema.json mongo:/tmp/
 docker compose exec -it mongo \
     mongoimport --host 'mongo:27017' -u 'root' -p 'root123' --authenticationDatabase 'admin' \
@@ -91,7 +91,7 @@ mongosh "mongodb://root:root123@127.0.0.1:27017/"
 Deploy 
 
 ```sh
-cd /workspace/mongo-sr-demo/01_had/sr/
+cd /workspaces/mongo-sr-demo/01_had/sr/
 # Cleanup first
 docker compose down && docker network prune -f && docker volume prune -f
 docker compose up -d
@@ -108,7 +108,7 @@ Services
 Deploy
 
 ```sh
-cd /workspace/mongo-sr-demo/02_needed/metastore/
+cd /workspaces/mongo-sr-demo/02_needed/metastore/
 docker compose up -d
 ```
 
@@ -122,7 +122,7 @@ Services
 Deploy
 
 ```sh
-cd /workspace/mongo-sr-demo/02_needed/trino/
+cd /workspaces/mongo-sr-demo/02_needed/trino/
 # Cleanup first
 docker compose down && docker network prune -f && docker volume prune -f
 docker compose up -d
@@ -153,5 +153,5 @@ docker network prune -f
 # Remove volumes
 docker volume prune -f
 # Remove local data
-sudo rm /workspace/mongo-sr-demo/0[1-2]_*/*/data* -rf
+sudo rm /workspaces/mongo-sr-demo/0[1-2]_*/*/data* -rf
 ```
